@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "db": {
+      "schemaPath": "prisma.graphql",
+      "extensions": {
+        "endpoints": {
+          "default": {
+            "url": "${env:PRISMA_SERVER_ENDPOINT}/${env:APP_NAME}/${env:STAGE}",
+            "headers": {
+              "Authorization": "Bearer ${env:APP_TOKEN}"
+            }
+          }
+        },
+        "codegen": [{ "generator": "prisma-binding", "language": "typescript", "input": "prisma.graphql", "output": { "binding": "../src/prisma.ts" } }]
+      }
+    }
+  }
+}

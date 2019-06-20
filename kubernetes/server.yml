@@ -1,0 +1,95 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tinderjobs
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tinderjobs-backend-config
+  namespace: tinderjobs
+data:
+   NODE_ENV: "development"
+   PRISMA_SERVER_ENDPOINT: "http://prisma-service.prisma.svc.cluster.local"
+   APP_NAME: "tinderjobs"
+   STAGE: "develop"
+   APP_SECRET: "localsecret"
+   PORT: "4000"
+   DEBUG: "false"
+   TRACING: "false"
+   PRISMA_MANAGEMENT_API_SECRET: "asecret"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tinderjobs-backend
+  namespace: tinderjobs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tinderjobs-backend
+  template:
+    metadata:
+      labels:
+        app: tinderjobs-backend
+    spec:
+      containers:
+      - name: backend
+        image: gcr.io/makeit-241622/tinderjobs
+        ports:
+        - containerPort: 4000
+        env:
+          - name: PRISMA_SERVER_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                key: PRISMA_SERVER_ENDPOINT
+                name: tinderjobs-backend-config
+          - name: APP_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: APP_NAME
+                name: tinderjobs-backend-config
+          - name: STAGE
+            valueFrom:
+              configMapKeyRef:
+                key: STAGE
+                name: tinderjobs-backend-config
+          - name: NODE_ENV
+            valueFrom:
+              configMapKeyRef:
+                key: NODE_ENV
+                name: tinderjobs-backend-config
+          - name: APP_SECRET
+            valueFrom:
+              configMapKeyRef:
+                key: APP_SECRET
+                name: tinderjobs-backend-config
+          - name: DEBUG
+            valueFrom:
+              configMapKeyRef:
+                key: DEBUG
+                name: tinderjobs-backend-config
+          - name: TRACING
+            valueFrom:
+              configMapKeyRef:
+                key: TRACING
+                name: tinderjobs-backend-config
+          - name: PRISMA_MANAGEMENT_API_SECRET
+            valueFrom:
+              configMapKeyRef:
+                key: PRISMA_MANAGEMENT_API_SECRET
+                name: tinderjobs-backend-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tinderjobs-service
+  namespace: tinderjobs
+spec:
+  selector:
+    app: tinderjobs-backend
+  ports:
+  - port: 80
+    targetPort: 4000
+  type: LoadBalancer

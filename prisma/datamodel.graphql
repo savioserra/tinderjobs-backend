@@ -1,0 +1,54 @@
+
+type User {
+  id: UUID! @id @unique
+  email: String! @unique
+  password: String!
+  profileAvatarUrl: String!
+  rating: Float!
+
+  likes: [Like!]!
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  deleted: Boolean! @default(value: false)
+}
+
+type Like {
+  id: UUID! @id @unique
+
+  user: User @db(name: "user_id") @relation(link: INLINE)
+  job: Job @db(name: "job_id") @relation(link: INLINE)  
+  match: Match
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  deleted: Boolean! @default(value: false)
+}
+
+type Match {
+  id: UUID! @id @unique
+
+  like: Like @db(name: "like_id")  @relation(link: INLINE)
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  deleted: Boolean! @default(value: false)
+}
+
+type Job {
+  id: UUID! @id @unique
+  companyName: String!
+  companyAvatarUrl: String!  
+  title: String!
+  description: String!
+  weekHours: Int!
+  weekDays: String!
+  remuneration: Float!
+  city: String!
+
+  like: Like @db(name: "like_id")
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  deleted: Boolean! @default(value: false)
+}

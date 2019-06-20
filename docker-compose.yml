@@ -1,0 +1,68 @@
+version: "3"
+services:
+  backend:
+    build: .
+    image: tinderjobs
+    container_name: tinderjobs-backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - "./:/app/tinderjobs"
+    depends_on:
+      - prisma
+    environment:
+      NODE_ENV: "development"
+      PRISMA_SERVER_ENDPOINT: "http://prisma:4466"
+      APP_NAME: "tinderjobs"
+      STAGE: "develop"
+      APP_SECRET: "localsecret"
+      PORT: 4000
+      PRISMA_MANAGEMENT_API_SECRET: "localsecret"
+      DEBUG: "true"
+      TRACING: "true"
+
+  prisma:
+    image: "prismagraphql/prisma:1.32.2"
+    container_name: tinderjobs-prisma
+    restart: always
+    ports:
+      - 4466
+    depends_on:
+      - postgres
+    environment:
+      PRISMA_CONFIG: |
+        port: 4466
+        managementApiSecret: localsecret
+        databases:
+          default:
+            connector: postgres
+            host: postgres
+            port: 5432
+            user: prisma
+            password: prisma
+            rawAccess: true
+            migrations: true
+
+  postgres:
+    image: postgres:11.3-alpine
+    container_name: tinderjobs-db
+    restart: always
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+    volumes:
+      - /var/lib/postgresql/data
+
+  pgadmin:
+    image: "dpage/pgadmin4"
+    container_name: tinderjobs-pgadmin
+    depends_on:
+      - postgres
+    ports:
+      - "80:80"
+    volumes:
+      - /var/lib/pgadmin
+      - /pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "tinderjobs"
+      PGADMIN_DEFAULT_PASSWORD: "tinderjobs"
