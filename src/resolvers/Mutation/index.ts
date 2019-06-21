@@ -1,7 +1,9 @@
 import auth from "./auth";
+import like from "./like";
 
 const Mutation = {
-  ...auth
+  ...auth,
+  ...like
 };
 
 export default Mutation;

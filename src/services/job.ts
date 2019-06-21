@@ -1,9 +1,16 @@
 import { Job, Prisma, User } from "../prisma";
 
-export default class JobService {
+export class JobService {
   public static async getAvailableJobs(userId: string, prisma: Prisma): Promise<Job[]> {
     const user = await prisma.query.user({ where: { id: userId } }, "{ id city { name } skills { id } }");
-    const jobs = await prisma.query.jobs({ where: { city: { name: user.city.name }, status: { name: "active" } } }, "{ id skills { id } }");
+    const jobs = await prisma.query.jobs(
+      { where: { city: { name: user.city.name }, status: { name: "active" } } },
+      "{ title companyName companyAvatarUrl matchThreshold description weekHours weekDays remuneration createdAt updatedAt deleted id skills { id } }"
+    );
+
+    console.log(user, jobs);
+
+    console.log(jobs.filter(j => this.getCompactibility(user, j) >= j.matchThreshold));
 
     return jobs.filter(j => this.getCompactibility(user, j) >= j.matchThreshold);
   }
@@ -14,6 +21,6 @@ export default class JobService {
 
     const filteredSkills = userSkills.filter(id => jobSkills.includes(id));
 
-    return filteredSkills.length / jobSkills.length;
+    return filteredSkills.length / jobSkills.length || 1;
   }
 }

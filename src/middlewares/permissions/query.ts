@@ -1,12 +1,3 @@
-import { rule } from "graphql-shield";
-import { getUserId } from "../../utils";
+import sharedRules from "./shared";
 
-const rules = {
-  isAuthenticatedUser: rule()((parent, args, context) => {
-    const userId = getUserId(context);
-
-    return Boolean(userId);
-  })
-};
-
-export const Query = rules.isAuthenticatedUser;
+export const Query = sharedRules.isAuthenticatedUser;

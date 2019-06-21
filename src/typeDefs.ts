@@ -5,55 +5,55 @@ scalar UUID
 type User {
   id: UUID!
   email: String!
-  password: String!
   avatarUrl: String!
   rating: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deleted: Boolean!
 
-  likes: [Like!]!
-
-  createdAt: DateTime! 
-  updatedAt: DateTime! 
-  deleted: Boolean! 
+  matches: [Match!]!
+  skills: [Skill!]!
+  city: City!
 }
 
-type Like {
-  id: UUID!  
+type Skill {
+  id: UUID!
+  name: String!
+  description: String
+}
 
-  user: User 
-  job: Job 
-  match: Match
-
-  createdAt: DateTime! 
-  updatedAt: DateTime! 
-  deleted: Boolean! 
+type City {
+  id: UUID!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deleted: Boolean!
 }
 
 type Match {
-  id: UUID!  
+  id: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deleted: Boolean!
 
-  like: Like
-
-  createdAt: DateTime! 
-  updatedAt: DateTime! 
-  deleted: Boolean! 
+  job: Job!
 }
 
 type Job {
-  id: UUID!  
+  id: UUID!
   companyName: String!
-  companyAvatarUrl: String!  
+  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
   weekDays: String!
   remuneration: Float!
-  city: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deleted: Boolean!
+  matchThreshold: Float!
 
-  like: Like
-
-  createdAt: DateTime! 
-  updatedAt: DateTime! 
-  deleted: Boolean! 
+  city: City!
 }
 
 type Query {
@@ -64,10 +64,19 @@ type Query {
 type AuthPayload {
   token: String
   user: User
+  info: String!
+}
+
+type LikePayload {
+  info: String!
+  success: Boolean!
 }
 
 type Mutation {
-  signUp(email: String!, password: String!): AuthPayload!
+  signUp(email: String!, password: String!, avatarUrl: String!, city: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+
+  like(jobId: UUID!): LikePayload!
 }
 
 type Subscription {

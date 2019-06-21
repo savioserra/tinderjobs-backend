@@ -41,7 +41,7 @@ type Like {
 type Match {
   id: UUID! @id @unique
 
-  like: Like @db(name: "like_id") @relation(link: INLINE)
+  like: Like! @db(name: "like_id") @relation(link: INLINE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt

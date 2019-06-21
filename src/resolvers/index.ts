@@ -1,12 +1,14 @@
-import Mutation from "./mutations";
-import Query from "./queries";
-import Subscription from "./subscriptions";
+import Mutation from "./Mutation";
+import Query from "./Query";
+import Subscription from "./Subscription";
 
-import { User } from "./types/User";
+import { Match } from "./Match";
+import { User } from "./User";
 
 export default {
   Query,
   Mutation,
   User,
-  Subscription
+  Subscription,
+  Match
 };

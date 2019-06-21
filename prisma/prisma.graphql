@@ -1,5 +1,5 @@
 # source: http://prisma:4466/tinderjobs/develop
-# timestamp: Fri Jun 21 2019 02:31:14 GMT+0000 (Coordinated Universal Time)
+# timestamp: Fri Jun 21 2019 16:11:44 GMT+0000 (Coordinated Universal Time)
 
 type AggregateCity {
   count: Int!
@@ -1922,6 +1922,13 @@ input LikeUpdateManyWithWhereNestedInput {
   data: LikeUpdateManyDataInput!
 }
 
+input LikeUpdateOneRequiredWithoutMatchInput {
+  create: LikeCreateWithoutMatchInput
+  connect: LikeWhereUniqueInput
+  update: LikeUpdateWithoutMatchDataInput
+  upsert: LikeUpsertWithoutMatchInput
+}
+
 input LikeUpdateOneWithoutJobInput {
   create: LikeCreateWithoutJobInput
   connect: LikeWhereUniqueInput
@@ -1929,15 +1936,6 @@ input LikeUpdateOneWithoutJobInput {
   delete: Boolean
   update: LikeUpdateWithoutJobDataInput
   upsert: LikeUpsertWithoutJobInput
-}
-
-input LikeUpdateOneWithoutMatchInput {
-  create: LikeCreateWithoutMatchInput
-  connect: LikeWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: LikeUpdateWithoutMatchDataInput
-  upsert: LikeUpsertWithoutMatchInput
 }
 
 input LikeUpdateWithoutJobDataInput {
@@ -2063,7 +2061,7 @@ scalar Long
 
 type Match {
   id: UUID!
-  like: Like
+  like: Like!
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
@@ -2082,7 +2080,7 @@ type MatchConnection {
 input MatchCreateInput {
   id: UUID
   deleted: Boolean
-  like: LikeCreateOneWithoutMatchInput
+  like: LikeCreateOneWithoutMatchInput!
 }
 
 input MatchCreateOneWithoutLikeInput {
@@ -2161,7 +2159,7 @@ input MatchSubscriptionWhereInput {
 
 input MatchUpdateInput {
   deleted: Boolean
-  like: LikeUpdateOneWithoutMatchInput
+  like: LikeUpdateOneRequiredWithoutMatchInput
 }
 
 input MatchUpdateManyMutationInput {

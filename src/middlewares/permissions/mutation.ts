@@ -1,8 +1,5 @@
-import { rule } from "graphql-shield";
-import { getUserId } from "../../utils";
-
-const rules = {
-};
+import sharedRules from "./shared";
 
 export const Mutation = {
+  like: sharedRules.isAuthenticatedUser
 };

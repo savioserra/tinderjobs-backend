@@ -2037,6 +2037,13 @@ input LikeUpdateManyWithWhereNestedInput {
   data: LikeUpdateManyDataInput!
 }
 
+input LikeUpdateOneRequiredWithoutMatchInput {
+  create: LikeCreateWithoutMatchInput
+  connect: LikeWhereUniqueInput
+  update: LikeUpdateWithoutMatchDataInput
+  upsert: LikeUpsertWithoutMatchInput
+}
+
 input LikeUpdateOneWithoutJobInput {
   create: LikeCreateWithoutJobInput
   connect: LikeWhereUniqueInput
@@ -2044,15 +2051,6 @@ input LikeUpdateOneWithoutJobInput {
   delete: Boolean
   update: LikeUpdateWithoutJobDataInput
   upsert: LikeUpsertWithoutJobInput
-}
-
-input LikeUpdateOneWithoutMatchInput {
-  create: LikeCreateWithoutMatchInput
-  connect: LikeWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: LikeUpdateWithoutMatchDataInput
-  upsert: LikeUpsertWithoutMatchInput
 }
 
 input LikeUpdateWithoutJobDataInput {
@@ -2178,7 +2176,7 @@ scalar Long
 
 type Match {
   id: UUID!
-  like: Like
+  like: Like!
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
@@ -2197,7 +2195,7 @@ type MatchConnection {
 input MatchCreateInput {
   id: UUID
   deleted: Boolean
-  like: LikeCreateOneWithoutMatchInput
+  like: LikeCreateOneWithoutMatchInput!
 }
 
 input MatchCreateOneWithoutLikeInput {
@@ -2276,7 +2274,7 @@ input MatchSubscriptionWhereInput {
 
 input MatchUpdateInput {
   deleted: Boolean
-  like: LikeUpdateOneWithoutMatchInput
+  like: LikeUpdateOneRequiredWithoutMatchInput
 }
 
 input MatchUpdateManyMutationInput {
@@ -4650,6 +4648,13 @@ export interface LikeUpdateManyWithWhereNestedInput {
   data: LikeUpdateManyDataInput
 }
 
+export interface LikeUpdateOneRequiredWithoutMatchInput {
+  create?: LikeCreateWithoutMatchInput | null
+  connect?: LikeWhereUniqueInput | null
+  update?: LikeUpdateWithoutMatchDataInput | null
+  upsert?: LikeUpsertWithoutMatchInput | null
+}
+
 export interface LikeUpdateOneWithoutJobInput {
   create?: LikeCreateWithoutJobInput | null
   connect?: LikeWhereUniqueInput | null
@@ -4657,15 +4662,6 @@ export interface LikeUpdateOneWithoutJobInput {
   delete?: Boolean | null
   update?: LikeUpdateWithoutJobDataInput | null
   upsert?: LikeUpsertWithoutJobInput | null
-}
-
-export interface LikeUpdateOneWithoutMatchInput {
-  create?: LikeCreateWithoutMatchInput | null
-  connect?: LikeWhereUniqueInput | null
-  disconnect?: Boolean | null
-  delete?: Boolean | null
-  update?: LikeUpdateWithoutMatchDataInput | null
-  upsert?: LikeUpsertWithoutMatchInput | null
 }
 
 export interface LikeUpdateWithoutJobDataInput {
@@ -4745,7 +4741,7 @@ export interface LikeWhereUniqueInput {
 export interface MatchCreateInput {
   id?: UUID | null
   deleted?: Boolean | null
-  like?: LikeCreateOneWithoutMatchInput | null
+  like: LikeCreateOneWithoutMatchInput
 }
 
 export interface MatchCreateOneWithoutLikeInput {
@@ -4771,7 +4767,7 @@ export interface MatchSubscriptionWhereInput {
 
 export interface MatchUpdateInput {
   deleted?: Boolean | null
-  like?: LikeUpdateOneWithoutMatchInput | null
+  like?: LikeUpdateOneRequiredWithoutMatchInput | null
 }
 
 export interface MatchUpdateManyMutationInput {
@@ -5627,7 +5623,7 @@ export interface LikeSubscriptionPayload {
 
 export interface Match {
   id: UUID
-  like?: Like | null
+  like: Like
   createdAt: DateTime
   updatedAt: DateTime
   deleted: Boolean
