@@ -6,7 +6,7 @@ type User {
   id: UUID!
   email: String!
   password: String!
-  profileAvatarUrl: String!
+  avatarUrl: String!
   rating: Float!
 
   likes: [Like!]!
@@ -58,6 +58,7 @@ type Job {
 
 type Query {
   me: User!
+  jobs: [Job!]!
 }
 
 type AuthPayload {

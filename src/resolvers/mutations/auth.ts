@@ -11,11 +11,11 @@ interface AuthPayload {
   user: User;
 }
 
-const signUp: Resolver<AuthPayload> = async (_, { email, password }, { prisma }) => {
+const signUp: Resolver<AuthPayload> = async (_, { email, password, avatarUrl }, { prisma }) => {
   const hashedPassword = await hash(password, 10);
 
   const user = await prisma.mutation.createUser({
-    data: { email, password: hashedPassword, profileAvatarUrl: "", rating: 4.2 }
+    data: { email, password: hashedPassword, avatarUrl, rating: 4.2 }
   });
 
   return {

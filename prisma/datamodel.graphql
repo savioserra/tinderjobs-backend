@@ -1,12 +1,25 @@
-
 type User {
   id: UUID! @id @unique
   email: String! @unique
   password: String!
-  profileAvatarUrl: String!
+  avatarUrl: String!
   rating: Float!
 
   likes: [Like!]!
+  city: City! @db(name: "city_id") @relation(link: INLINE)
+  skills: [Skill!]! @relation(name: "UserHasSkills")
+
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  deleted: Boolean! @default(value: false)
+}
+
+type City {
+  id: UUID! @id @unique
+  name: String! @unique
+
+  users: [User!]!
+  jobs: [Job!]!
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -17,7 +30,7 @@ type Like {
   id: UUID! @id @unique
 
   user: User @db(name: "user_id") @relation(link: INLINE)
-  job: Job @db(name: "job_id") @relation(link: INLINE)  
+  job: Job @db(name: "job_id") @relation(link: INLINE)
   match: Match
 
   createdAt: DateTime! @createdAt
@@ -28,27 +41,48 @@ type Like {
 type Match {
   id: UUID! @id @unique
 
-  like: Like @db(name: "like_id")  @relation(link: INLINE)
+  like: Like @db(name: "like_id") @relation(link: INLINE)
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   deleted: Boolean! @default(value: false)
 }
 
+type JobStatus {
+  id: UUID! @id @unique
+  name: String!
+
+  jobs: [Job!]!
+}
+
 type Job {
   id: UUID! @id @unique
   companyName: String!
-  companyAvatarUrl: String!  
+  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
   weekDays: String!
   remuneration: Float!
-  city: String!
+  matchThreshold: Float!
+  tags: String!
 
+  city: City! @db(name: "city_id") @relation(link: INLINE)
   like: Like @db(name: "like_id")
+  status: JobStatus @db(name: "status_id") @relation(link: INLINE)
+  skills: [Skill!]! @relation(name: "JobNeedSkills")
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   deleted: Boolean! @default(value: false)
+}
+
+type Skill {
+  id: UUID! @id @unique
+
+  name: String!
+  description: String
+
+  jobs: [Job!]! @relation(name: "JobNeedSkills")
+  users: [User!]! @relation(name: "UserHasSkills")
 }
