@@ -11,8 +11,8 @@ const matches: Resolver<Match[], UserType> = async (root, args, context) => {
   });
 };
 
-const availableJobs: Resolver<Job[], UserType> = async (root, args, ctx) => {
-  return JobService.getAvailableJobs(root.id, ctx.prisma);
+const availableJobs: Resolver<Job[], UserType> = async (root, { page, perPage }, ctx) => {
+  return JobService.getAvailableJobs(root.id, page, perPage, ctx.prisma);
 };
 
 const city: Resolver<City, UserType> = async (root, args, { prisma }) => {

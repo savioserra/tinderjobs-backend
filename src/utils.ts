@@ -12,21 +12,22 @@ export const getUserId = (context: any) => {
   if (Authorization) {
     const token = Authorization.replace("Bearer ", "");
     const verifiedToken = verify(token, appSecret) as Token;
+
     return verifiedToken && verifiedToken.userId;
   }
 };
 
-export const retry = async <T> (callback: () => void, retries = 2) => {
-  let retry = 0;
+export const retry = async <T>(callback: () => Promise<T>, retries = 2) => {
+  let curRetry = 0;
 
-  while (retry < retries) {
+  while (curRetry < retries) {
     try {
       return await callback();
     } catch (error) {
       // ignore
     }
 
-    retry++;
+    curRetry++;
   }
 
   throw new Error("Maximum retries attempts reached.");

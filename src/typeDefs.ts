@@ -13,7 +13,7 @@ type User {
   company: Company
   skills: [Skill!]!
   managedJobs: [Job!]!
-  availableJobs: [Job!]!
+  availableJobs(page: Int = 1, perPage:  Int = 10): [Job!]!
   matches: [Match!]!
 
   createdAt: DateTime!
@@ -52,7 +52,6 @@ type JobStatus {
 
 type Job {
   id: UUID!
-
   title: String!
   description: String!
   weekHours: Int!
@@ -110,7 +109,8 @@ type Mutation {
   signUp(email: String!, password: String!, avatarUrl: String!, city: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
 
-  like(jobId: UUID!): LikePayload!
+  likeJob(jobId: UUID!): LikePayload!
+  likeCandidate(candidateId: UUID!, jobId: UUID!): LikePayload!
 }
 
 type Subscription {
