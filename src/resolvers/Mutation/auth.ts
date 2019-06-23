@@ -4,7 +4,7 @@ import { sign } from "jsonwebtoken";
 
 import { User } from "../../prisma";
 import { Resolver } from "../../typings";
-import { appSecret, retry } from "../../utils";
+import { appSecret } from "../../utils";
 
 interface AuthPayload {
   token?: string;
@@ -13,6 +13,14 @@ interface AuthPayload {
 }
 
 const signUp: Resolver<AuthPayload> = async (_, { email, password, avatarUrl, city }, { prisma }) => {
+  const emailInUse = await prisma.exists.User({ email });
+
+  if (emailInUse) {
+    return {
+      info: "Email already in use!"
+    };
+  }
+
   const hashedPassword = await hash(password, 10);
 
   const user = await prisma.mutation.createUser({

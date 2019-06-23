@@ -5,9 +5,12 @@ type User {
   avatarUrl: String!
   rating: Float!
 
-  likes: [Like!]!
+  userLikes: [Like!]! @relation(name: "LikeHasUser")
+  managerLikes: [Like!]! @relation(name: "LikeHasManager")
   city: City! @db(name: "city_id") @relation(link: INLINE)
+  company: Company @db(name: "company_id") @relation(link: INLINE)
   skills: [Skill!]! @relation(name: "UserHasSkills")
+  managedJobs: [Job!]!
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -29,7 +32,8 @@ type City {
 type Like {
   id: UUID! @id @unique
 
-  user: User @db(name: "user_id") @relation(link: INLINE)
+  candidate: User @db(name: "user_id") @relation(link: INLINE, name: "LikeHasUser")
+  manager: User @db(name: "user_jobmanager_id") @relation(link: INLINE, name: "LikeHasManager")
   job: Job @db(name: "job_id") @relation(link: INLINE)
   match: Match
 
@@ -50,15 +54,14 @@ type Match {
 
 type JobStatus {
   id: UUID! @id @unique
-  name: String!
+  name: String! @unique
 
   jobs: [Job!]!
 }
 
 type Job {
   id: UUID! @id @unique
-  companyName: String!
-  companyAvatarUrl: String!
+
   title: String!
   description: String!
   weekHours: Int!
@@ -67,20 +70,31 @@ type Job {
   matchThreshold: Float!
   tags: String!
 
+  manager: User! @db(name: "user_manager_id") @relation(link: INLINE)
   city: City! @db(name: "city_id") @relation(link: INLINE)
-  like: Like @db(name: "like_id")
-  status: JobStatus @db(name: "status_id") @relation(link: INLINE)
+  status: JobStatus! @db(name: "status_id") @relation(link: INLINE)
+  company: Company! @db(name: "company_id") @relation(link: INLINE)
   skills: [Skill!]! @relation(name: "JobNeedSkills")
+  likes: [Like!]!
 
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   deleted: Boolean! @default(value: false)
 }
 
+type Company {
+  id: UUID! @id @unique
+  name: String!
+  legalName: String!
+  avatarUrl: String!
+
+  jobs: [Job!]!
+  users: [User!]!
+}
+
 type Skill {
   id: UUID! @id @unique
-
-  name: String!
+  name: String! @unique
   description: String
 
   jobs: [Job!]! @relation(name: "JobNeedSkills")

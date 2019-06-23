@@ -5,26 +5,29 @@ scalar UUID
 type User {
   id: UUID!
   email: String!
+  password: String!
   avatarUrl: String!
   rating: Float!
+
+  city: City!
+  company: Company
+  skills: [Skill!]!
+  managedJobs: [Job!]!
+  availableJobs: [Job!]!
+  matches: [Match!]!
+
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
-
-  matches: [Match!]!
-  skills: [Skill!]!
-  city: City!
-}
-
-type Skill {
-  id: UUID!
-  name: String!
-  description: String
 }
 
 type City {
   id: UUID!
   name: String!
+
+  users: [User!]!
+  jobs: [Job!]!
+
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
@@ -32,33 +35,64 @@ type City {
 
 type Match {
   id: UUID!
+
+  job: Job!
+
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
+}
 
-  job: Job!
+type JobStatus {
+  id: UUID!
+  name: String!
+
+  jobs: [Job!]!
 }
 
 type Job {
   id: UUID!
-  companyName: String!
-  companyAvatarUrl: String!
+
   title: String!
   description: String!
   weekHours: Int!
   weekDays: String!
   remuneration: Float!
+  matchThreshold: Float!
+  tags: String!
+
+  manager: User!
+  city: City!
+  status: JobStatus
+  company: Company!
+  skills: [Skill!]!
+
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
-  matchThreshold: Float!
+}
 
-  city: City!
+type Company {
+  id: UUID!
+  name: String!
+  legalName: String!
+  avatarUrl: String!
+
+  jobs: [Job!]!
+}
+
+type Skill {
+  id: UUID!
+
+  name: String!
+  description: String
+
+  jobs: [Job!]!
+  users: [User!]!
 }
 
 type Query {
   me: User!
-  jobs: [Job!]!
 }
 
 type AuthPayload {

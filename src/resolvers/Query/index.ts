@@ -1,9 +1,7 @@
-import job from "./job";
 import user from "./user";
 
 const Query = {
-  ...user,
-  ...job
+  ...user
 };
 
 export default Query;

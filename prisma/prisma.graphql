@@ -1,7 +1,11 @@
 # source: http://prisma:4466/tinderjobs/develop
-# timestamp: Fri Jun 21 2019 16:11:44 GMT+0000 (Coordinated Universal Time)
+# timestamp: Sun Jun 23 2019 19:22:05 GMT+0000 (Coordinated Universal Time)
 
 type AggregateCity {
+  count: Int!
+}
+
+type AggregateCompany {
   count: Int!
 }
 
@@ -321,12 +325,333 @@ input CityWhereUniqueInput {
   name: String
 }
 
+type Company {
+  id: UUID!
+  name: String!
+  legalName: String!
+  avatarUrl: String!
+  jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job!]
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+}
+
+"""A connection to a list of items."""
+type CompanyConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [CompanyEdge]!
+  aggregate: AggregateCompany!
+}
+
+input CompanyCreateInput {
+  id: UUID
+  name: String!
+  legalName: String!
+  avatarUrl: String!
+  jobs: JobCreateManyWithoutCompanyInput
+  users: UserCreateManyWithoutCompanyInput
+}
+
+input CompanyCreateOneWithoutJobsInput {
+  create: CompanyCreateWithoutJobsInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateOneWithoutUsersInput {
+  create: CompanyCreateWithoutUsersInput
+  connect: CompanyWhereUniqueInput
+}
+
+input CompanyCreateWithoutJobsInput {
+  id: UUID
+  name: String!
+  legalName: String!
+  avatarUrl: String!
+  users: UserCreateManyWithoutCompanyInput
+}
+
+input CompanyCreateWithoutUsersInput {
+  id: UUID
+  name: String!
+  legalName: String!
+  avatarUrl: String!
+  jobs: JobCreateManyWithoutCompanyInput
+}
+
+"""An edge in a connection."""
+type CompanyEdge {
+  """The item at the end of the edge."""
+  node: Company!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum CompanyOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  legalName_ASC
+  legalName_DESC
+  avatarUrl_ASC
+  avatarUrl_DESC
+}
+
+type CompanyPreviousValues {
+  id: UUID!
+  name: String!
+  legalName: String!
+  avatarUrl: String!
+}
+
+type CompanySubscriptionPayload {
+  mutation: MutationType!
+  node: Company
+  updatedFields: [String!]
+  previousValues: CompanyPreviousValues
+}
+
+input CompanySubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CompanySubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CompanySubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CompanySubscriptionWhereInput!]
+
+  """The subscription event gets dispatched when it's listed in mutation_in"""
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: CompanyWhereInput
+}
+
+input CompanyUpdateInput {
+  name: String
+  legalName: String
+  avatarUrl: String
+  jobs: JobUpdateManyWithoutCompanyInput
+  users: UserUpdateManyWithoutCompanyInput
+}
+
+input CompanyUpdateManyMutationInput {
+  name: String
+  legalName: String
+  avatarUrl: String
+}
+
+input CompanyUpdateOneRequiredWithoutJobsInput {
+  create: CompanyCreateWithoutJobsInput
+  connect: CompanyWhereUniqueInput
+  update: CompanyUpdateWithoutJobsDataInput
+  upsert: CompanyUpsertWithoutJobsInput
+}
+
+input CompanyUpdateOneWithoutUsersInput {
+  create: CompanyCreateWithoutUsersInput
+  connect: CompanyWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: CompanyUpdateWithoutUsersDataInput
+  upsert: CompanyUpsertWithoutUsersInput
+}
+
+input CompanyUpdateWithoutJobsDataInput {
+  name: String
+  legalName: String
+  avatarUrl: String
+  users: UserUpdateManyWithoutCompanyInput
+}
+
+input CompanyUpdateWithoutUsersDataInput {
+  name: String
+  legalName: String
+  avatarUrl: String
+  jobs: JobUpdateManyWithoutCompanyInput
+}
+
+input CompanyUpsertWithoutJobsInput {
+  update: CompanyUpdateWithoutJobsDataInput!
+  create: CompanyCreateWithoutJobsInput!
+}
+
+input CompanyUpsertWithoutUsersInput {
+  update: CompanyUpdateWithoutUsersDataInput!
+  create: CompanyCreateWithoutUsersInput!
+}
+
+input CompanyWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CompanyWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CompanyWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CompanyWhereInput!]
+  id: UUID
+
+  """All values that are not equal to given value."""
+  id_not: UUID
+
+  """All values that are contained in given list."""
+  id_in: [UUID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [UUID!]
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  legalName: String
+
+  """All values that are not equal to given value."""
+  legalName_not: String
+
+  """All values that are contained in given list."""
+  legalName_in: [String!]
+
+  """All values that are not contained in given list."""
+  legalName_not_in: [String!]
+
+  """All values less than the given value."""
+  legalName_lt: String
+
+  """All values less than or equal the given value."""
+  legalName_lte: String
+
+  """All values greater than the given value."""
+  legalName_gt: String
+
+  """All values greater than or equal the given value."""
+  legalName_gte: String
+
+  """All values containing the given string."""
+  legalName_contains: String
+
+  """All values not containing the given string."""
+  legalName_not_contains: String
+
+  """All values starting with the given string."""
+  legalName_starts_with: String
+
+  """All values not starting with the given string."""
+  legalName_not_starts_with: String
+
+  """All values ending with the given string."""
+  legalName_ends_with: String
+
+  """All values not ending with the given string."""
+  legalName_not_ends_with: String
+  avatarUrl: String
+
+  """All values that are not equal to given value."""
+  avatarUrl_not: String
+
+  """All values that are contained in given list."""
+  avatarUrl_in: [String!]
+
+  """All values that are not contained in given list."""
+  avatarUrl_not_in: [String!]
+
+  """All values less than the given value."""
+  avatarUrl_lt: String
+
+  """All values less than or equal the given value."""
+  avatarUrl_lte: String
+
+  """All values greater than the given value."""
+  avatarUrl_gt: String
+
+  """All values greater than or equal the given value."""
+  avatarUrl_gte: String
+
+  """All values containing the given string."""
+  avatarUrl_contains: String
+
+  """All values not containing the given string."""
+  avatarUrl_not_contains: String
+
+  """All values starting with the given string."""
+  avatarUrl_starts_with: String
+
+  """All values not starting with the given string."""
+  avatarUrl_not_starts_with: String
+
+  """All values ending with the given string."""
+  avatarUrl_ends_with: String
+
+  """All values not ending with the given string."""
+  avatarUrl_not_ends_with: String
+  jobs_every: JobWhereInput
+  jobs_some: JobWhereInput
+  jobs_none: JobWhereInput
+  users_every: UserWhereInput
+  users_some: UserWhereInput
+  users_none: UserWhereInput
+}
+
+input CompanyWhereUniqueInput {
+  id: UUID
+}
+
 scalar DateTime
 
 type Job {
   id: UUID!
-  companyName: String!
-  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
@@ -334,10 +659,12 @@ type Job {
   remuneration: Float!
   matchThreshold: Float!
   tags: String!
+  manager: User!
   city: City!
-  like: Like
-  status: JobStatus
+  status: JobStatus!
+  company: Company!
   skills(where: SkillWhereInput, orderBy: SkillOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Skill!]
+  likes(where: LikeWhereInput, orderBy: LikeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Like!]
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
@@ -355,8 +682,6 @@ type JobConnection {
 
 input JobCreateInput {
   id: UUID
-  companyName: String!
-  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
@@ -365,14 +690,26 @@ input JobCreateInput {
   matchThreshold: Float!
   tags: String!
   deleted: Boolean
+  manager: UserCreateOneWithoutManagedJobsInput!
   city: CityCreateOneWithoutJobsInput!
-  like: LikeCreateOneWithoutJobInput
-  status: JobStatusCreateOneWithoutJobsInput
+  status: JobStatusCreateOneWithoutJobsInput!
+  company: CompanyCreateOneWithoutJobsInput!
   skills: SkillCreateManyWithoutJobsInput
+  likes: LikeCreateManyWithoutJobInput
 }
 
 input JobCreateManyWithoutCityInput {
   create: [JobCreateWithoutCityInput!]
+  connect: [JobWhereUniqueInput!]
+}
+
+input JobCreateManyWithoutCompanyInput {
+  create: [JobCreateWithoutCompanyInput!]
+  connect: [JobWhereUniqueInput!]
+}
+
+input JobCreateManyWithoutManagerInput {
+  create: [JobCreateWithoutManagerInput!]
   connect: [JobWhereUniqueInput!]
 }
 
@@ -386,15 +723,13 @@ input JobCreateManyWithoutStatusInput {
   connect: [JobWhereUniqueInput!]
 }
 
-input JobCreateOneWithoutLikeInput {
-  create: JobCreateWithoutLikeInput
+input JobCreateOneWithoutLikesInput {
+  create: JobCreateWithoutLikesInput
   connect: JobWhereUniqueInput
 }
 
 input JobCreateWithoutCityInput {
   id: UUID
-  companyName: String!
-  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
@@ -403,15 +738,49 @@ input JobCreateWithoutCityInput {
   matchThreshold: Float!
   tags: String!
   deleted: Boolean
-  like: LikeCreateOneWithoutJobInput
-  status: JobStatusCreateOneWithoutJobsInput
+  manager: UserCreateOneWithoutManagedJobsInput!
+  status: JobStatusCreateOneWithoutJobsInput!
+  company: CompanyCreateOneWithoutJobsInput!
+  skills: SkillCreateManyWithoutJobsInput
+  likes: LikeCreateManyWithoutJobInput
+}
+
+input JobCreateWithoutCompanyInput {
+  id: UUID
+  title: String!
+  description: String!
+  weekHours: Int!
+  weekDays: String!
+  remuneration: Float!
+  matchThreshold: Float!
+  tags: String!
+  deleted: Boolean
+  manager: UserCreateOneWithoutManagedJobsInput!
+  city: CityCreateOneWithoutJobsInput!
+  status: JobStatusCreateOneWithoutJobsInput!
+  skills: SkillCreateManyWithoutJobsInput
+  likes: LikeCreateManyWithoutJobInput
+}
+
+input JobCreateWithoutLikesInput {
+  id: UUID
+  title: String!
+  description: String!
+  weekHours: Int!
+  weekDays: String!
+  remuneration: Float!
+  matchThreshold: Float!
+  tags: String!
+  deleted: Boolean
+  manager: UserCreateOneWithoutManagedJobsInput!
+  city: CityCreateOneWithoutJobsInput!
+  status: JobStatusCreateOneWithoutJobsInput!
+  company: CompanyCreateOneWithoutJobsInput!
   skills: SkillCreateManyWithoutJobsInput
 }
 
-input JobCreateWithoutLikeInput {
+input JobCreateWithoutManagerInput {
   id: UUID
-  companyName: String!
-  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
@@ -421,14 +790,14 @@ input JobCreateWithoutLikeInput {
   tags: String!
   deleted: Boolean
   city: CityCreateOneWithoutJobsInput!
-  status: JobStatusCreateOneWithoutJobsInput
+  status: JobStatusCreateOneWithoutJobsInput!
+  company: CompanyCreateOneWithoutJobsInput!
   skills: SkillCreateManyWithoutJobsInput
+  likes: LikeCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutSkillsInput {
   id: UUID
-  companyName: String!
-  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
@@ -437,15 +806,15 @@ input JobCreateWithoutSkillsInput {
   matchThreshold: Float!
   tags: String!
   deleted: Boolean
+  manager: UserCreateOneWithoutManagedJobsInput!
   city: CityCreateOneWithoutJobsInput!
-  like: LikeCreateOneWithoutJobInput
-  status: JobStatusCreateOneWithoutJobsInput
+  status: JobStatusCreateOneWithoutJobsInput!
+  company: CompanyCreateOneWithoutJobsInput!
+  likes: LikeCreateManyWithoutJobInput
 }
 
 input JobCreateWithoutStatusInput {
   id: UUID
-  companyName: String!
-  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
@@ -454,9 +823,11 @@ input JobCreateWithoutStatusInput {
   matchThreshold: Float!
   tags: String!
   deleted: Boolean
+  manager: UserCreateOneWithoutManagedJobsInput!
   city: CityCreateOneWithoutJobsInput!
-  like: LikeCreateOneWithoutJobInput
+  company: CompanyCreateOneWithoutJobsInput!
   skills: SkillCreateManyWithoutJobsInput
+  likes: LikeCreateManyWithoutJobInput
 }
 
 """An edge in a connection."""
@@ -471,10 +842,6 @@ type JobEdge {
 enum JobOrderByInput {
   id_ASC
   id_DESC
-  companyName_ASC
-  companyName_DESC
-  companyAvatarUrl_ASC
-  companyAvatarUrl_DESC
   title_ASC
   title_DESC
   description_ASC
@@ -499,8 +866,6 @@ enum JobOrderByInput {
 
 type JobPreviousValues {
   id: UUID!
-  companyName: String!
-  companyAvatarUrl: String!
   title: String!
   description: String!
   weekHours: Int!
@@ -532,86 +897,6 @@ input JobScalarWhereInput {
 
   """All values that are not contained in given list."""
   id_not_in: [UUID!]
-  companyName: String
-
-  """All values that are not equal to given value."""
-  companyName_not: String
-
-  """All values that are contained in given list."""
-  companyName_in: [String!]
-
-  """All values that are not contained in given list."""
-  companyName_not_in: [String!]
-
-  """All values less than the given value."""
-  companyName_lt: String
-
-  """All values less than or equal the given value."""
-  companyName_lte: String
-
-  """All values greater than the given value."""
-  companyName_gt: String
-
-  """All values greater than or equal the given value."""
-  companyName_gte: String
-
-  """All values containing the given string."""
-  companyName_contains: String
-
-  """All values not containing the given string."""
-  companyName_not_contains: String
-
-  """All values starting with the given string."""
-  companyName_starts_with: String
-
-  """All values not starting with the given string."""
-  companyName_not_starts_with: String
-
-  """All values ending with the given string."""
-  companyName_ends_with: String
-
-  """All values not ending with the given string."""
-  companyName_not_ends_with: String
-  companyAvatarUrl: String
-
-  """All values that are not equal to given value."""
-  companyAvatarUrl_not: String
-
-  """All values that are contained in given list."""
-  companyAvatarUrl_in: [String!]
-
-  """All values that are not contained in given list."""
-  companyAvatarUrl_not_in: [String!]
-
-  """All values less than the given value."""
-  companyAvatarUrl_lt: String
-
-  """All values less than or equal the given value."""
-  companyAvatarUrl_lte: String
-
-  """All values greater than the given value."""
-  companyAvatarUrl_gt: String
-
-  """All values greater than or equal the given value."""
-  companyAvatarUrl_gte: String
-
-  """All values containing the given string."""
-  companyAvatarUrl_contains: String
-
-  """All values not containing the given string."""
-  companyAvatarUrl_not_contains: String
-
-  """All values starting with the given string."""
-  companyAvatarUrl_starts_with: String
-
-  """All values not starting with the given string."""
-  companyAvatarUrl_not_starts_with: String
-
-  """All values ending with the given string."""
-  companyAvatarUrl_ends_with: String
-
-  """All values not ending with the given string."""
-  companyAvatarUrl_not_ends_with: String
   title: String
 
   """All values that are not equal to given value."""
@@ -987,11 +1272,9 @@ input JobStatusUpdateManyMutationInput {
   name: String
 }
 
-input JobStatusUpdateOneWithoutJobsInput {
+input JobStatusUpdateOneRequiredWithoutJobsInput {
   create: JobStatusCreateWithoutJobsInput
   connect: JobStatusWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
   update: JobStatusUpdateWithoutJobsDataInput
   upsert: JobStatusUpsertWithoutJobsInput
 }
@@ -1071,6 +1354,7 @@ input JobStatusWhereInput {
 
 input JobStatusWhereUniqueInput {
   id: UUID
+  name: String
 }
 
 type JobSubscriptionPayload {
@@ -1111,8 +1395,6 @@ input JobSubscriptionWhereInput {
 }
 
 input JobUpdateInput {
-  companyName: String
-  companyAvatarUrl: String
   title: String
   description: String
   weekHours: Int
@@ -1121,15 +1403,15 @@ input JobUpdateInput {
   matchThreshold: Float
   tags: String
   deleted: Boolean
+  manager: UserUpdateOneRequiredWithoutManagedJobsInput
   city: CityUpdateOneRequiredWithoutJobsInput
-  like: LikeUpdateOneWithoutJobInput
-  status: JobStatusUpdateOneWithoutJobsInput
+  status: JobStatusUpdateOneRequiredWithoutJobsInput
+  company: CompanyUpdateOneRequiredWithoutJobsInput
   skills: SkillUpdateManyWithoutJobsInput
+  likes: LikeUpdateManyWithoutJobInput
 }
 
 input JobUpdateManyDataInput {
-  companyName: String
-  companyAvatarUrl: String
   title: String
   description: String
   weekHours: Int
@@ -1141,8 +1423,6 @@ input JobUpdateManyDataInput {
 }
 
 input JobUpdateManyMutationInput {
-  companyName: String
-  companyAvatarUrl: String
   title: String
   description: String
   weekHours: Int
@@ -1163,6 +1443,30 @@ input JobUpdateManyWithoutCityInput {
   updateMany: [JobUpdateManyWithWhereNestedInput!]
   deleteMany: [JobScalarWhereInput!]
   upsert: [JobUpsertWithWhereUniqueWithoutCityInput!]
+}
+
+input JobUpdateManyWithoutCompanyInput {
+  create: [JobCreateWithoutCompanyInput!]
+  connect: [JobWhereUniqueInput!]
+  set: [JobWhereUniqueInput!]
+  disconnect: [JobWhereUniqueInput!]
+  delete: [JobWhereUniqueInput!]
+  update: [JobUpdateWithWhereUniqueWithoutCompanyInput!]
+  updateMany: [JobUpdateManyWithWhereNestedInput!]
+  deleteMany: [JobScalarWhereInput!]
+  upsert: [JobUpsertWithWhereUniqueWithoutCompanyInput!]
+}
+
+input JobUpdateManyWithoutManagerInput {
+  create: [JobCreateWithoutManagerInput!]
+  connect: [JobWhereUniqueInput!]
+  set: [JobWhereUniqueInput!]
+  disconnect: [JobWhereUniqueInput!]
+  delete: [JobWhereUniqueInput!]
+  update: [JobUpdateWithWhereUniqueWithoutManagerInput!]
+  updateMany: [JobUpdateManyWithWhereNestedInput!]
+  deleteMany: [JobScalarWhereInput!]
+  upsert: [JobUpsertWithWhereUniqueWithoutManagerInput!]
 }
 
 input JobUpdateManyWithoutSkillsInput {
@@ -1194,18 +1498,16 @@ input JobUpdateManyWithWhereNestedInput {
   data: JobUpdateManyDataInput!
 }
 
-input JobUpdateOneWithoutLikeInput {
-  create: JobCreateWithoutLikeInput
+input JobUpdateOneWithoutLikesInput {
+  create: JobCreateWithoutLikesInput
   connect: JobWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: JobUpdateWithoutLikeDataInput
-  upsert: JobUpsertWithoutLikeInput
+  update: JobUpdateWithoutLikesDataInput
+  upsert: JobUpsertWithoutLikesInput
 }
 
 input JobUpdateWithoutCityDataInput {
-  companyName: String
-  companyAvatarUrl: String
   title: String
   description: String
   weekHours: Int
@@ -1214,14 +1516,46 @@ input JobUpdateWithoutCityDataInput {
   matchThreshold: Float
   tags: String
   deleted: Boolean
-  like: LikeUpdateOneWithoutJobInput
-  status: JobStatusUpdateOneWithoutJobsInput
+  manager: UserUpdateOneRequiredWithoutManagedJobsInput
+  status: JobStatusUpdateOneRequiredWithoutJobsInput
+  company: CompanyUpdateOneRequiredWithoutJobsInput
+  skills: SkillUpdateManyWithoutJobsInput
+  likes: LikeUpdateManyWithoutJobInput
+}
+
+input JobUpdateWithoutCompanyDataInput {
+  title: String
+  description: String
+  weekHours: Int
+  weekDays: String
+  remuneration: Float
+  matchThreshold: Float
+  tags: String
+  deleted: Boolean
+  manager: UserUpdateOneRequiredWithoutManagedJobsInput
+  city: CityUpdateOneRequiredWithoutJobsInput
+  status: JobStatusUpdateOneRequiredWithoutJobsInput
+  skills: SkillUpdateManyWithoutJobsInput
+  likes: LikeUpdateManyWithoutJobInput
+}
+
+input JobUpdateWithoutLikesDataInput {
+  title: String
+  description: String
+  weekHours: Int
+  weekDays: String
+  remuneration: Float
+  matchThreshold: Float
+  tags: String
+  deleted: Boolean
+  manager: UserUpdateOneRequiredWithoutManagedJobsInput
+  city: CityUpdateOneRequiredWithoutJobsInput
+  status: JobStatusUpdateOneRequiredWithoutJobsInput
+  company: CompanyUpdateOneRequiredWithoutJobsInput
   skills: SkillUpdateManyWithoutJobsInput
 }
 
-input JobUpdateWithoutLikeDataInput {
-  companyName: String
-  companyAvatarUrl: String
+input JobUpdateWithoutManagerDataInput {
   title: String
   description: String
   weekHours: Int
@@ -1231,13 +1565,13 @@ input JobUpdateWithoutLikeDataInput {
   tags: String
   deleted: Boolean
   city: CityUpdateOneRequiredWithoutJobsInput
-  status: JobStatusUpdateOneWithoutJobsInput
+  status: JobStatusUpdateOneRequiredWithoutJobsInput
+  company: CompanyUpdateOneRequiredWithoutJobsInput
   skills: SkillUpdateManyWithoutJobsInput
+  likes: LikeUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutSkillsDataInput {
-  companyName: String
-  companyAvatarUrl: String
   title: String
   description: String
   weekHours: Int
@@ -1246,14 +1580,14 @@ input JobUpdateWithoutSkillsDataInput {
   matchThreshold: Float
   tags: String
   deleted: Boolean
+  manager: UserUpdateOneRequiredWithoutManagedJobsInput
   city: CityUpdateOneRequiredWithoutJobsInput
-  like: LikeUpdateOneWithoutJobInput
-  status: JobStatusUpdateOneWithoutJobsInput
+  status: JobStatusUpdateOneRequiredWithoutJobsInput
+  company: CompanyUpdateOneRequiredWithoutJobsInput
+  likes: LikeUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithoutStatusDataInput {
-  companyName: String
-  companyAvatarUrl: String
   title: String
   description: String
   weekHours: Int
@@ -1262,14 +1596,26 @@ input JobUpdateWithoutStatusDataInput {
   matchThreshold: Float
   tags: String
   deleted: Boolean
+  manager: UserUpdateOneRequiredWithoutManagedJobsInput
   city: CityUpdateOneRequiredWithoutJobsInput
-  like: LikeUpdateOneWithoutJobInput
+  company: CompanyUpdateOneRequiredWithoutJobsInput
   skills: SkillUpdateManyWithoutJobsInput
+  likes: LikeUpdateManyWithoutJobInput
 }
 
 input JobUpdateWithWhereUniqueWithoutCityInput {
   where: JobWhereUniqueInput!
   data: JobUpdateWithoutCityDataInput!
+}
+
+input JobUpdateWithWhereUniqueWithoutCompanyInput {
+  where: JobWhereUniqueInput!
+  data: JobUpdateWithoutCompanyDataInput!
+}
+
+input JobUpdateWithWhereUniqueWithoutManagerInput {
+  where: JobWhereUniqueInput!
+  data: JobUpdateWithoutManagerDataInput!
 }
 
 input JobUpdateWithWhereUniqueWithoutSkillsInput {
@@ -1282,15 +1628,27 @@ input JobUpdateWithWhereUniqueWithoutStatusInput {
   data: JobUpdateWithoutStatusDataInput!
 }
 
-input JobUpsertWithoutLikeInput {
-  update: JobUpdateWithoutLikeDataInput!
-  create: JobCreateWithoutLikeInput!
+input JobUpsertWithoutLikesInput {
+  update: JobUpdateWithoutLikesDataInput!
+  create: JobCreateWithoutLikesInput!
 }
 
 input JobUpsertWithWhereUniqueWithoutCityInput {
   where: JobWhereUniqueInput!
   update: JobUpdateWithoutCityDataInput!
   create: JobCreateWithoutCityInput!
+}
+
+input JobUpsertWithWhereUniqueWithoutCompanyInput {
+  where: JobWhereUniqueInput!
+  update: JobUpdateWithoutCompanyDataInput!
+  create: JobCreateWithoutCompanyInput!
+}
+
+input JobUpsertWithWhereUniqueWithoutManagerInput {
+  where: JobWhereUniqueInput!
+  update: JobUpdateWithoutManagerDataInput!
+  create: JobCreateWithoutManagerInput!
 }
 
 input JobUpsertWithWhereUniqueWithoutSkillsInput {
@@ -1324,86 +1682,6 @@ input JobWhereInput {
 
   """All values that are not contained in given list."""
   id_not_in: [UUID!]
-  companyName: String
-
-  """All values that are not equal to given value."""
-  companyName_not: String
-
-  """All values that are contained in given list."""
-  companyName_in: [String!]
-
-  """All values that are not contained in given list."""
-  companyName_not_in: [String!]
-
-  """All values less than the given value."""
-  companyName_lt: String
-
-  """All values less than or equal the given value."""
-  companyName_lte: String
-
-  """All values greater than the given value."""
-  companyName_gt: String
-
-  """All values greater than or equal the given value."""
-  companyName_gte: String
-
-  """All values containing the given string."""
-  companyName_contains: String
-
-  """All values not containing the given string."""
-  companyName_not_contains: String
-
-  """All values starting with the given string."""
-  companyName_starts_with: String
-
-  """All values not starting with the given string."""
-  companyName_not_starts_with: String
-
-  """All values ending with the given string."""
-  companyName_ends_with: String
-
-  """All values not ending with the given string."""
-  companyName_not_ends_with: String
-  companyAvatarUrl: String
-
-  """All values that are not equal to given value."""
-  companyAvatarUrl_not: String
-
-  """All values that are contained in given list."""
-  companyAvatarUrl_in: [String!]
-
-  """All values that are not contained in given list."""
-  companyAvatarUrl_not_in: [String!]
-
-  """All values less than the given value."""
-  companyAvatarUrl_lt: String
-
-  """All values less than or equal the given value."""
-  companyAvatarUrl_lte: String
-
-  """All values greater than the given value."""
-  companyAvatarUrl_gt: String
-
-  """All values greater than or equal the given value."""
-  companyAvatarUrl_gte: String
-
-  """All values containing the given string."""
-  companyAvatarUrl_contains: String
-
-  """All values not containing the given string."""
-  companyAvatarUrl_not_contains: String
-
-  """All values starting with the given string."""
-  companyAvatarUrl_starts_with: String
-
-  """All values not starting with the given string."""
-  companyAvatarUrl_not_starts_with: String
-
-  """All values ending with the given string."""
-  companyAvatarUrl_ends_with: String
-
-  """All values not ending with the given string."""
-  companyAvatarUrl_not_ends_with: String
   title: String
 
   """All values that are not equal to given value."""
@@ -1678,12 +1956,16 @@ input JobWhereInput {
 
   """All values that are not equal to given value."""
   deleted_not: Boolean
+  manager: UserWhereInput
   city: CityWhereInput
-  like: LikeWhereInput
   status: JobStatusWhereInput
+  company: CompanyWhereInput
   skills_every: SkillWhereInput
   skills_some: SkillWhereInput
   skills_none: SkillWhereInput
+  likes_every: LikeWhereInput
+  likes_some: LikeWhereInput
+  likes_none: LikeWhereInput
 }
 
 input JobWhereUniqueInput {
@@ -1695,7 +1977,8 @@ scalar Json
 
 type Like {
   id: UUID!
-  user: User
+  candidate: User
+  manager: User
   job: Job
   match: Match
   createdAt: DateTime!
@@ -1716,19 +1999,25 @@ type LikeConnection {
 input LikeCreateInput {
   id: UUID
   deleted: Boolean
-  user: UserCreateOneWithoutLikesInput
-  job: JobCreateOneWithoutLikeInput
+  candidate: UserCreateOneWithoutUserLikesInput
+  manager: UserCreateOneWithoutManagerLikesInput
+  job: JobCreateOneWithoutLikesInput
   match: MatchCreateOneWithoutLikeInput
 }
 
-input LikeCreateManyWithoutUserInput {
-  create: [LikeCreateWithoutUserInput!]
+input LikeCreateManyWithoutCandidateInput {
+  create: [LikeCreateWithoutCandidateInput!]
   connect: [LikeWhereUniqueInput!]
 }
 
-input LikeCreateOneWithoutJobInput {
-  create: LikeCreateWithoutJobInput
-  connect: LikeWhereUniqueInput
+input LikeCreateManyWithoutJobInput {
+  create: [LikeCreateWithoutJobInput!]
+  connect: [LikeWhereUniqueInput!]
+}
+
+input LikeCreateManyWithoutManagerInput {
+  create: [LikeCreateWithoutManagerInput!]
+  connect: [LikeWhereUniqueInput!]
 }
 
 input LikeCreateOneWithoutMatchInput {
@@ -1736,25 +2025,36 @@ input LikeCreateOneWithoutMatchInput {
   connect: LikeWhereUniqueInput
 }
 
+input LikeCreateWithoutCandidateInput {
+  id: UUID
+  deleted: Boolean
+  manager: UserCreateOneWithoutManagerLikesInput
+  job: JobCreateOneWithoutLikesInput
+  match: MatchCreateOneWithoutLikeInput
+}
+
 input LikeCreateWithoutJobInput {
   id: UUID
   deleted: Boolean
-  user: UserCreateOneWithoutLikesInput
+  candidate: UserCreateOneWithoutUserLikesInput
+  manager: UserCreateOneWithoutManagerLikesInput
+  match: MatchCreateOneWithoutLikeInput
+}
+
+input LikeCreateWithoutManagerInput {
+  id: UUID
+  deleted: Boolean
+  candidate: UserCreateOneWithoutUserLikesInput
+  job: JobCreateOneWithoutLikesInput
   match: MatchCreateOneWithoutLikeInput
 }
 
 input LikeCreateWithoutMatchInput {
   id: UUID
   deleted: Boolean
-  user: UserCreateOneWithoutLikesInput
-  job: JobCreateOneWithoutLikeInput
-}
-
-input LikeCreateWithoutUserInput {
-  id: UUID
-  deleted: Boolean
-  job: JobCreateOneWithoutLikeInput
-  match: MatchCreateOneWithoutLikeInput
+  candidate: UserCreateOneWithoutUserLikesInput
+  manager: UserCreateOneWithoutManagerLikesInput
+  job: JobCreateOneWithoutLikesInput
 }
 
 """An edge in a connection."""
@@ -1892,8 +2192,9 @@ input LikeSubscriptionWhereInput {
 
 input LikeUpdateInput {
   deleted: Boolean
-  user: UserUpdateOneWithoutLikesInput
-  job: JobUpdateOneWithoutLikeInput
+  candidate: UserUpdateOneWithoutUserLikesInput
+  manager: UserUpdateOneWithoutManagerLikesInput
+  job: JobUpdateOneWithoutLikesInput
   match: MatchUpdateOneWithoutLikeInput
 }
 
@@ -1905,16 +2206,40 @@ input LikeUpdateManyMutationInput {
   deleted: Boolean
 }
 
-input LikeUpdateManyWithoutUserInput {
-  create: [LikeCreateWithoutUserInput!]
+input LikeUpdateManyWithoutCandidateInput {
+  create: [LikeCreateWithoutCandidateInput!]
   connect: [LikeWhereUniqueInput!]
   set: [LikeWhereUniqueInput!]
   disconnect: [LikeWhereUniqueInput!]
   delete: [LikeWhereUniqueInput!]
-  update: [LikeUpdateWithWhereUniqueWithoutUserInput!]
+  update: [LikeUpdateWithWhereUniqueWithoutCandidateInput!]
   updateMany: [LikeUpdateManyWithWhereNestedInput!]
   deleteMany: [LikeScalarWhereInput!]
-  upsert: [LikeUpsertWithWhereUniqueWithoutUserInput!]
+  upsert: [LikeUpsertWithWhereUniqueWithoutCandidateInput!]
+}
+
+input LikeUpdateManyWithoutJobInput {
+  create: [LikeCreateWithoutJobInput!]
+  connect: [LikeWhereUniqueInput!]
+  set: [LikeWhereUniqueInput!]
+  disconnect: [LikeWhereUniqueInput!]
+  delete: [LikeWhereUniqueInput!]
+  update: [LikeUpdateWithWhereUniqueWithoutJobInput!]
+  updateMany: [LikeUpdateManyWithWhereNestedInput!]
+  deleteMany: [LikeScalarWhereInput!]
+  upsert: [LikeUpsertWithWhereUniqueWithoutJobInput!]
+}
+
+input LikeUpdateManyWithoutManagerInput {
+  create: [LikeCreateWithoutManagerInput!]
+  connect: [LikeWhereUniqueInput!]
+  set: [LikeWhereUniqueInput!]
+  disconnect: [LikeWhereUniqueInput!]
+  delete: [LikeWhereUniqueInput!]
+  update: [LikeUpdateWithWhereUniqueWithoutManagerInput!]
+  updateMany: [LikeUpdateManyWithWhereNestedInput!]
+  deleteMany: [LikeScalarWhereInput!]
+  upsert: [LikeUpsertWithWhereUniqueWithoutManagerInput!]
 }
 
 input LikeUpdateManyWithWhereNestedInput {
@@ -1929,41 +2254,47 @@ input LikeUpdateOneRequiredWithoutMatchInput {
   upsert: LikeUpsertWithoutMatchInput
 }
 
-input LikeUpdateOneWithoutJobInput {
-  create: LikeCreateWithoutJobInput
-  connect: LikeWhereUniqueInput
-  disconnect: Boolean
-  delete: Boolean
-  update: LikeUpdateWithoutJobDataInput
-  upsert: LikeUpsertWithoutJobInput
+input LikeUpdateWithoutCandidateDataInput {
+  deleted: Boolean
+  manager: UserUpdateOneWithoutManagerLikesInput
+  job: JobUpdateOneWithoutLikesInput
+  match: MatchUpdateOneWithoutLikeInput
 }
 
 input LikeUpdateWithoutJobDataInput {
   deleted: Boolean
-  user: UserUpdateOneWithoutLikesInput
+  candidate: UserUpdateOneWithoutUserLikesInput
+  manager: UserUpdateOneWithoutManagerLikesInput
+  match: MatchUpdateOneWithoutLikeInput
+}
+
+input LikeUpdateWithoutManagerDataInput {
+  deleted: Boolean
+  candidate: UserUpdateOneWithoutUserLikesInput
+  job: JobUpdateOneWithoutLikesInput
   match: MatchUpdateOneWithoutLikeInput
 }
 
 input LikeUpdateWithoutMatchDataInput {
   deleted: Boolean
-  user: UserUpdateOneWithoutLikesInput
-  job: JobUpdateOneWithoutLikeInput
+  candidate: UserUpdateOneWithoutUserLikesInput
+  manager: UserUpdateOneWithoutManagerLikesInput
+  job: JobUpdateOneWithoutLikesInput
 }
 
-input LikeUpdateWithoutUserDataInput {
-  deleted: Boolean
-  job: JobUpdateOneWithoutLikeInput
-  match: MatchUpdateOneWithoutLikeInput
-}
-
-input LikeUpdateWithWhereUniqueWithoutUserInput {
+input LikeUpdateWithWhereUniqueWithoutCandidateInput {
   where: LikeWhereUniqueInput!
-  data: LikeUpdateWithoutUserDataInput!
+  data: LikeUpdateWithoutCandidateDataInput!
 }
 
-input LikeUpsertWithoutJobInput {
-  update: LikeUpdateWithoutJobDataInput!
-  create: LikeCreateWithoutJobInput!
+input LikeUpdateWithWhereUniqueWithoutJobInput {
+  where: LikeWhereUniqueInput!
+  data: LikeUpdateWithoutJobDataInput!
+}
+
+input LikeUpdateWithWhereUniqueWithoutManagerInput {
+  where: LikeWhereUniqueInput!
+  data: LikeUpdateWithoutManagerDataInput!
 }
 
 input LikeUpsertWithoutMatchInput {
@@ -1971,10 +2302,22 @@ input LikeUpsertWithoutMatchInput {
   create: LikeCreateWithoutMatchInput!
 }
 
-input LikeUpsertWithWhereUniqueWithoutUserInput {
+input LikeUpsertWithWhereUniqueWithoutCandidateInput {
   where: LikeWhereUniqueInput!
-  update: LikeUpdateWithoutUserDataInput!
-  create: LikeCreateWithoutUserInput!
+  update: LikeUpdateWithoutCandidateDataInput!
+  create: LikeCreateWithoutCandidateInput!
+}
+
+input LikeUpsertWithWhereUniqueWithoutJobInput {
+  where: LikeWhereUniqueInput!
+  update: LikeUpdateWithoutJobDataInput!
+  create: LikeCreateWithoutJobInput!
+}
+
+input LikeUpsertWithWhereUniqueWithoutManagerInput {
+  where: LikeWhereUniqueInput!
+  update: LikeUpdateWithoutManagerDataInput!
+  create: LikeCreateWithoutManagerInput!
 }
 
 input LikeWhereInput {
@@ -2044,7 +2387,8 @@ input LikeWhereInput {
 
   """All values that are not equal to given value."""
   deleted_not: Boolean
-  user: UserWhereInput
+  candidate: UserWhereInput
+  manager: UserWhereInput
   job: JobWhereInput
   match: MatchWhereInput
 }
@@ -2265,6 +2609,7 @@ type Mutation {
   createMatch(data: MatchCreateInput!): Match!
   createJobStatus(data: JobStatusCreateInput!): JobStatus!
   createJob(data: JobCreateInput!): Job!
+  createCompany(data: CompanyCreateInput!): Company!
   createSkill(data: SkillCreateInput!): Skill!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateCity(data: CityUpdateInput!, where: CityWhereUniqueInput!): City
@@ -2272,6 +2617,7 @@ type Mutation {
   updateMatch(data: MatchUpdateInput!, where: MatchWhereUniqueInput!): Match
   updateJobStatus(data: JobStatusUpdateInput!, where: JobStatusWhereUniqueInput!): JobStatus
   updateJob(data: JobUpdateInput!, where: JobWhereUniqueInput!): Job
+  updateCompany(data: CompanyUpdateInput!, where: CompanyWhereUniqueInput!): Company
   updateSkill(data: SkillUpdateInput!, where: SkillWhereUniqueInput!): Skill
   deleteUser(where: UserWhereUniqueInput!): User
   deleteCity(where: CityWhereUniqueInput!): City
@@ -2279,6 +2625,7 @@ type Mutation {
   deleteMatch(where: MatchWhereUniqueInput!): Match
   deleteJobStatus(where: JobStatusWhereUniqueInput!): JobStatus
   deleteJob(where: JobWhereUniqueInput!): Job
+  deleteCompany(where: CompanyWhereUniqueInput!): Company
   deleteSkill(where: SkillWhereUniqueInput!): Skill
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   upsertCity(where: CityWhereUniqueInput!, create: CityCreateInput!, update: CityUpdateInput!): City!
@@ -2286,6 +2633,7 @@ type Mutation {
   upsertMatch(where: MatchWhereUniqueInput!, create: MatchCreateInput!, update: MatchUpdateInput!): Match!
   upsertJobStatus(where: JobStatusWhereUniqueInput!, create: JobStatusCreateInput!, update: JobStatusUpdateInput!): JobStatus!
   upsertJob(where: JobWhereUniqueInput!, create: JobCreateInput!, update: JobUpdateInput!): Job!
+  upsertCompany(where: CompanyWhereUniqueInput!, create: CompanyCreateInput!, update: CompanyUpdateInput!): Company!
   upsertSkill(where: SkillWhereUniqueInput!, create: SkillCreateInput!, update: SkillUpdateInput!): Skill!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   updateManyCities(data: CityUpdateManyMutationInput!, where: CityWhereInput): BatchPayload!
@@ -2293,6 +2641,7 @@ type Mutation {
   updateManyMatches(data: MatchUpdateManyMutationInput!, where: MatchWhereInput): BatchPayload!
   updateManyJobStatuses(data: JobStatusUpdateManyMutationInput!, where: JobStatusWhereInput): BatchPayload!
   updateManyJobs(data: JobUpdateManyMutationInput!, where: JobWhereInput): BatchPayload!
+  updateManyCompanies(data: CompanyUpdateManyMutationInput!, where: CompanyWhereInput): BatchPayload!
   updateManySkills(data: SkillUpdateManyMutationInput!, where: SkillWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
   deleteManyCities(where: CityWhereInput): BatchPayload!
@@ -2300,6 +2649,7 @@ type Mutation {
   deleteManyMatches(where: MatchWhereInput): BatchPayload!
   deleteManyJobStatuses(where: JobStatusWhereInput): BatchPayload!
   deleteManyJobs(where: JobWhereInput): BatchPayload!
+  deleteManyCompanies(where: CompanyWhereInput): BatchPayload!
   deleteManySkills(where: SkillWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
@@ -2342,6 +2692,7 @@ type Query {
   matches(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Match]!
   jobStatuses(where: JobStatusWhereInput, orderBy: JobStatusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [JobStatus]!
   jobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job]!
+  companies(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Company]!
   skills(where: SkillWhereInput, orderBy: SkillOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Skill]!
   user(where: UserWhereUniqueInput!): User
   city(where: CityWhereUniqueInput!): City
@@ -2349,6 +2700,7 @@ type Query {
   match(where: MatchWhereUniqueInput!): Match
   jobStatus(where: JobStatusWhereUniqueInput!): JobStatus
   job(where: JobWhereUniqueInput!): Job
+  company(where: CompanyWhereUniqueInput!): Company
   skill(where: SkillWhereUniqueInput!): Skill
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   citiesConnection(where: CityWhereInput, orderBy: CityOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CityConnection!
@@ -2356,6 +2708,7 @@ type Query {
   matchesConnection(where: MatchWhereInput, orderBy: MatchOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MatchConnection!
   jobStatusesConnection(where: JobStatusWhereInput, orderBy: JobStatusOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JobStatusConnection!
   jobsConnection(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): JobConnection!
+  companiesConnection(where: CompanyWhereInput, orderBy: CompanyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CompanyConnection!
   skillsConnection(where: SkillWhereInput, orderBy: SkillOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): SkillConnection!
 
   """Fetches an object given its ID"""
@@ -2766,6 +3119,7 @@ input SkillWhereInput {
 
 input SkillWhereUniqueInput {
   id: UUID
+  name: String
 }
 
 type Subscription {
@@ -2775,6 +3129,7 @@ type Subscription {
   match(where: MatchSubscriptionWhereInput): MatchSubscriptionPayload
   jobStatus(where: JobStatusSubscriptionWhereInput): JobStatusSubscriptionPayload
   job(where: JobSubscriptionWhereInput): JobSubscriptionPayload
+  company(where: CompanySubscriptionWhereInput): CompanySubscriptionPayload
   skill(where: SkillSubscriptionWhereInput): SkillSubscriptionPayload
 }
 
@@ -2784,9 +3139,12 @@ type User {
   password: String!
   avatarUrl: String!
   rating: Float!
-  likes(where: LikeWhereInput, orderBy: LikeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Like!]
+  userLikes(where: LikeWhereInput, orderBy: LikeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Like!]
+  managerLikes(where: LikeWhereInput, orderBy: LikeOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Like!]
   city: City!
+  company: Company
   skills(where: SkillWhereInput, orderBy: SkillOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Skill!]
+  managedJobs(where: JobWhereInput, orderBy: JobOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Job!]
   createdAt: DateTime!
   updatedAt: DateTime!
   deleted: Boolean!
@@ -2809,13 +3167,21 @@ input UserCreateInput {
   avatarUrl: String!
   rating: Float!
   deleted: Boolean
-  likes: LikeCreateManyWithoutUserInput
+  userLikes: LikeCreateManyWithoutCandidateInput
+  managerLikes: LikeCreateManyWithoutManagerInput
   city: CityCreateOneWithoutUsersInput!
+  company: CompanyCreateOneWithoutUsersInput
   skills: SkillCreateManyWithoutUsersInput
+  managedJobs: JobCreateManyWithoutManagerInput
 }
 
 input UserCreateManyWithoutCityInput {
   create: [UserCreateWithoutCityInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutCompanyInput {
+  create: [UserCreateWithoutCompanyInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -2824,8 +3190,18 @@ input UserCreateManyWithoutSkillsInput {
   connect: [UserWhereUniqueInput!]
 }
 
-input UserCreateOneWithoutLikesInput {
-  create: UserCreateWithoutLikesInput
+input UserCreateOneWithoutManagedJobsInput {
+  create: UserCreateWithoutManagedJobsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutManagerLikesInput {
+  create: UserCreateWithoutManagerLikesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutUserLikesInput {
+  create: UserCreateWithoutUserLikesInput
   connect: UserWhereUniqueInput
 }
 
@@ -2836,19 +3212,53 @@ input UserCreateWithoutCityInput {
   avatarUrl: String!
   rating: Float!
   deleted: Boolean
-  likes: LikeCreateManyWithoutUserInput
+  userLikes: LikeCreateManyWithoutCandidateInput
+  managerLikes: LikeCreateManyWithoutManagerInput
+  company: CompanyCreateOneWithoutUsersInput
   skills: SkillCreateManyWithoutUsersInput
+  managedJobs: JobCreateManyWithoutManagerInput
 }
 
-input UserCreateWithoutLikesInput {
+input UserCreateWithoutCompanyInput {
   id: UUID
   email: String!
   password: String!
   avatarUrl: String!
   rating: Float!
   deleted: Boolean
+  userLikes: LikeCreateManyWithoutCandidateInput
+  managerLikes: LikeCreateManyWithoutManagerInput
   city: CityCreateOneWithoutUsersInput!
   skills: SkillCreateManyWithoutUsersInput
+  managedJobs: JobCreateManyWithoutManagerInput
+}
+
+input UserCreateWithoutManagedJobsInput {
+  id: UUID
+  email: String!
+  password: String!
+  avatarUrl: String!
+  rating: Float!
+  deleted: Boolean
+  userLikes: LikeCreateManyWithoutCandidateInput
+  managerLikes: LikeCreateManyWithoutManagerInput
+  city: CityCreateOneWithoutUsersInput!
+  company: CompanyCreateOneWithoutUsersInput
+  skills: SkillCreateManyWithoutUsersInput
+}
+
+input UserCreateWithoutManagerLikesInput {
+  id: UUID
+  email: String!
+  password: String!
+  avatarUrl: String!
+  rating: Float!
+  deleted: Boolean
+  userLikes: LikeCreateManyWithoutCandidateInput
+  city: CityCreateOneWithoutUsersInput!
+  company: CompanyCreateOneWithoutUsersInput
+  skills: SkillCreateManyWithoutUsersInput
+  managedJobs: JobCreateManyWithoutManagerInput
 }
 
 input UserCreateWithoutSkillsInput {
@@ -2858,8 +3268,25 @@ input UserCreateWithoutSkillsInput {
   avatarUrl: String!
   rating: Float!
   deleted: Boolean
-  likes: LikeCreateManyWithoutUserInput
+  userLikes: LikeCreateManyWithoutCandidateInput
+  managerLikes: LikeCreateManyWithoutManagerInput
   city: CityCreateOneWithoutUsersInput!
+  company: CompanyCreateOneWithoutUsersInput
+  managedJobs: JobCreateManyWithoutManagerInput
+}
+
+input UserCreateWithoutUserLikesInput {
+  id: UUID
+  email: String!
+  password: String!
+  avatarUrl: String!
+  rating: Float!
+  deleted: Boolean
+  managerLikes: LikeCreateManyWithoutManagerInput
+  city: CityCreateOneWithoutUsersInput!
+  company: CompanyCreateOneWithoutUsersInput
+  skills: SkillCreateManyWithoutUsersInput
+  managedJobs: JobCreateManyWithoutManagerInput
 }
 
 """An edge in a connection."""
@@ -3155,9 +3582,12 @@ input UserUpdateInput {
   avatarUrl: String
   rating: Float
   deleted: Boolean
-  likes: LikeUpdateManyWithoutUserInput
+  userLikes: LikeUpdateManyWithoutCandidateInput
+  managerLikes: LikeUpdateManyWithoutManagerInput
   city: CityUpdateOneRequiredWithoutUsersInput
+  company: CompanyUpdateOneWithoutUsersInput
   skills: SkillUpdateManyWithoutUsersInput
+  managedJobs: JobUpdateManyWithoutManagerInput
 }
 
 input UserUpdateManyDataInput {
@@ -3188,6 +3618,18 @@ input UserUpdateManyWithoutCityInput {
   upsert: [UserUpsertWithWhereUniqueWithoutCityInput!]
 }
 
+input UserUpdateManyWithoutCompanyInput {
+  create: [UserCreateWithoutCompanyInput!]
+  connect: [UserWhereUniqueInput!]
+  set: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutCompanyInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutCompanyInput!]
+}
+
 input UserUpdateManyWithoutSkillsInput {
   create: [UserCreateWithoutSkillsInput!]
   connect: [UserWhereUniqueInput!]
@@ -3205,13 +3647,29 @@ input UserUpdateManyWithWhereNestedInput {
   data: UserUpdateManyDataInput!
 }
 
-input UserUpdateOneWithoutLikesInput {
-  create: UserCreateWithoutLikesInput
+input UserUpdateOneRequiredWithoutManagedJobsInput {
+  create: UserCreateWithoutManagedJobsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutManagedJobsDataInput
+  upsert: UserUpsertWithoutManagedJobsInput
+}
+
+input UserUpdateOneWithoutManagerLikesInput {
+  create: UserCreateWithoutManagerLikesInput
   connect: UserWhereUniqueInput
   disconnect: Boolean
   delete: Boolean
-  update: UserUpdateWithoutLikesDataInput
-  upsert: UserUpsertWithoutLikesInput
+  update: UserUpdateWithoutManagerLikesDataInput
+  upsert: UserUpsertWithoutManagerLikesInput
+}
+
+input UserUpdateOneWithoutUserLikesInput {
+  create: UserCreateWithoutUserLikesInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+  delete: Boolean
+  update: UserUpdateWithoutUserLikesDataInput
+  upsert: UserUpsertWithoutUserLikesInput
 }
 
 input UserUpdateWithoutCityDataInput {
@@ -3220,18 +3678,50 @@ input UserUpdateWithoutCityDataInput {
   avatarUrl: String
   rating: Float
   deleted: Boolean
-  likes: LikeUpdateManyWithoutUserInput
+  userLikes: LikeUpdateManyWithoutCandidateInput
+  managerLikes: LikeUpdateManyWithoutManagerInput
+  company: CompanyUpdateOneWithoutUsersInput
   skills: SkillUpdateManyWithoutUsersInput
+  managedJobs: JobUpdateManyWithoutManagerInput
 }
 
-input UserUpdateWithoutLikesDataInput {
+input UserUpdateWithoutCompanyDataInput {
   email: String
   password: String
   avatarUrl: String
   rating: Float
   deleted: Boolean
+  userLikes: LikeUpdateManyWithoutCandidateInput
+  managerLikes: LikeUpdateManyWithoutManagerInput
   city: CityUpdateOneRequiredWithoutUsersInput
   skills: SkillUpdateManyWithoutUsersInput
+  managedJobs: JobUpdateManyWithoutManagerInput
+}
+
+input UserUpdateWithoutManagedJobsDataInput {
+  email: String
+  password: String
+  avatarUrl: String
+  rating: Float
+  deleted: Boolean
+  userLikes: LikeUpdateManyWithoutCandidateInput
+  managerLikes: LikeUpdateManyWithoutManagerInput
+  city: CityUpdateOneRequiredWithoutUsersInput
+  company: CompanyUpdateOneWithoutUsersInput
+  skills: SkillUpdateManyWithoutUsersInput
+}
+
+input UserUpdateWithoutManagerLikesDataInput {
+  email: String
+  password: String
+  avatarUrl: String
+  rating: Float
+  deleted: Boolean
+  userLikes: LikeUpdateManyWithoutCandidateInput
+  city: CityUpdateOneRequiredWithoutUsersInput
+  company: CompanyUpdateOneWithoutUsersInput
+  skills: SkillUpdateManyWithoutUsersInput
+  managedJobs: JobUpdateManyWithoutManagerInput
 }
 
 input UserUpdateWithoutSkillsDataInput {
@@ -3240,8 +3730,24 @@ input UserUpdateWithoutSkillsDataInput {
   avatarUrl: String
   rating: Float
   deleted: Boolean
-  likes: LikeUpdateManyWithoutUserInput
+  userLikes: LikeUpdateManyWithoutCandidateInput
+  managerLikes: LikeUpdateManyWithoutManagerInput
   city: CityUpdateOneRequiredWithoutUsersInput
+  company: CompanyUpdateOneWithoutUsersInput
+  managedJobs: JobUpdateManyWithoutManagerInput
+}
+
+input UserUpdateWithoutUserLikesDataInput {
+  email: String
+  password: String
+  avatarUrl: String
+  rating: Float
+  deleted: Boolean
+  managerLikes: LikeUpdateManyWithoutManagerInput
+  city: CityUpdateOneRequiredWithoutUsersInput
+  company: CompanyUpdateOneWithoutUsersInput
+  skills: SkillUpdateManyWithoutUsersInput
+  managedJobs: JobUpdateManyWithoutManagerInput
 }
 
 input UserUpdateWithWhereUniqueWithoutCityInput {
@@ -3249,20 +3755,41 @@ input UserUpdateWithWhereUniqueWithoutCityInput {
   data: UserUpdateWithoutCityDataInput!
 }
 
+input UserUpdateWithWhereUniqueWithoutCompanyInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutCompanyDataInput!
+}
+
 input UserUpdateWithWhereUniqueWithoutSkillsInput {
   where: UserWhereUniqueInput!
   data: UserUpdateWithoutSkillsDataInput!
 }
 
-input UserUpsertWithoutLikesInput {
-  update: UserUpdateWithoutLikesDataInput!
-  create: UserCreateWithoutLikesInput!
+input UserUpsertWithoutManagedJobsInput {
+  update: UserUpdateWithoutManagedJobsDataInput!
+  create: UserCreateWithoutManagedJobsInput!
+}
+
+input UserUpsertWithoutManagerLikesInput {
+  update: UserUpdateWithoutManagerLikesDataInput!
+  create: UserCreateWithoutManagerLikesInput!
+}
+
+input UserUpsertWithoutUserLikesInput {
+  update: UserUpdateWithoutUserLikesDataInput!
+  create: UserCreateWithoutUserLikesInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutCityInput {
   where: UserWhereUniqueInput!
   update: UserUpdateWithoutCityDataInput!
   create: UserCreateWithoutCityInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutCompanyInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutCompanyDataInput!
+  create: UserCreateWithoutCompanyInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutSkillsInput {
@@ -3480,13 +4007,20 @@ input UserWhereInput {
 
   """All values that are not equal to given value."""
   deleted_not: Boolean
-  likes_every: LikeWhereInput
-  likes_some: LikeWhereInput
-  likes_none: LikeWhereInput
+  userLikes_every: LikeWhereInput
+  userLikes_some: LikeWhereInput
+  userLikes_none: LikeWhereInput
+  managerLikes_every: LikeWhereInput
+  managerLikes_some: LikeWhereInput
+  managerLikes_none: LikeWhereInput
   city: CityWhereInput
+  company: CompanyWhereInput
   skills_every: SkillWhereInput
   skills_some: SkillWhereInput
   skills_none: SkillWhereInput
+  managedJobs_every: JobWhereInput
+  managedJobs_some: JobWhereInput
+  managedJobs_none: JobWhereInput
 }
 
 input UserWhereUniqueInput {
