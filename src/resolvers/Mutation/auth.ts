@@ -35,10 +35,9 @@ const signUp: Resolver<AuthPayload> = async (_, { email, password, avatarUrl, ci
 };
 
 const login: Resolver<AuthPayload> = async (_, { email, password }, { prisma }) => {
-  const hashedPassword = await hash(password, 10);
   const user = await prisma.query.user({ where: { email } });
 
-  if (!user || !(await compare(password, hashedPassword))) {
+  if (!user || !(await compare(password, user.password))) {
     throw new GraphQLError("Credenciais inválidas!");
   }
 
