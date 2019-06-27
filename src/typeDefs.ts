@@ -58,7 +58,7 @@ type Job {
   weekDays: String!
   remuneration: Float!
   matchThreshold: Float!
-  tags: String!
+  tags: [String!]!
 
   manager: User!
   city: City!
